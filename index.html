@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiệu ứng tình yêu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fce4ec, #ff80ab); /* Gradient nền */
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #ff4081;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            max-width: 90%;
+            z-index: 2;
+        }
+        .content {
+            display: none;
+            margin-top: 20px;
+        }
+        .content img {
+            max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều rộng container */
+            height: auto;    /* Tự động điều chỉnh chiều cao dựa trên tỉ lệ gốc */
+            max-height: 500px; /* Chiều cao tối đa hợp lý */
+            border-radius: 10px; /* Tạo góc bo tròn cho ảnh */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm đổ bóng để ảnh nổi bật */
+            margin: 10px 0; /* Thêm khoảng cách trên dưới */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button:hover {
+            background-color: #e91e63;
+        }
+
+        /* Hiệu ứng trái tim và họa tiết */
+        .effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .heart, .star {
+            position: absolute;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        /* Trái tim */
+        .heart {
+            width: 20px;
+            height: 20px;
+            background-color: #ff4081;
+            transform: rotate(45deg);
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4081;
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            top: 0;
+            left: -10px;
+        }
+
+        /* Ngôi sao */
+        .star {
+            width: 10px;
+            height: 10px;
+            background-color: #ffe082; /* Màu vàng */
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 224, 130, 0.8); /* Hiệu ứng lấp lánh */
+        }
+
+        /* Animation float */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Tạo nhiều trái tim và ngôi sao */
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 25%; animation-delay: 1s; }
+        .heart:nth-child(3) { left: 40%; animation-delay: 2s; }
+        .heart:nth-child(4) { left: 55%; animation-delay: 3s; }
+        .heart:nth-child(5) { left: 70%; animation-delay: 4s; }
+        .heart:nth-child(6) { left: 85%; animation-delay: 1.5s; }
+
+        .star:nth-child(7) { left: 15%; animation-delay: 2s; }
+        .star:nth-child(8) { left: 35%; animation-delay: 3s; }
+        .star:nth-child(9) { left: 50%; animation-delay: 1.5s; }
+        .star:nth-child(10) { left: 65%; animation-delay: 2.5s; }
+        .star:nth-child(11) { left: 80%; animation-delay: 4.5s; }
+        .star:nth-child(12) { left: 90%; animation-delay: 1.2s; }
+    </style>
+</head>
+<body>
+    <!-- Hiệu ứng -->
+    <div class="effects">
+        <!-- Nhiều trái tim -->
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <!-- Nhiều ngôi sao -->
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="container" id="mainContainer">
+        <h1 id="title">MỪNG NGÀY 20/11 VỢ IUUU 💝 </h1>
+        <button id="showButton" onclick="startContent()">Hiển thị</button>
+        <div class="content" id="content">
+            <p id="text"></p>
+            <img id="image" src="" alt="Hình ảnh minh họa">
+        </div>
+    </div>
+
+    <script>
+        // Danh sách nội dung và hình ảnh
+        const data = [
+            { text: "HÍ HÍ, hồi đó nhìn hai đứa trẩu trẩu nhưng mò vui he, giờ tụi mình yêu nhau cũng đc gần 3 năm rùi có thể thấy bình thường hơn tẹo, nhưng mà chúng ta vui trong cái nhạt của hai đứa nhóaaaa ", img: "image/1.jpg" },
+            { text: "Uii đc ra gặp vợ ngta rất là dui, vì đây là lần đầu anh được hẹn hò và còn nhìu bỡ ngỡ nè, hẹn gặp vợ vào tháng 12 sắp tới để có thật nhiều lần gặp mặt hơn nữa nè, còn chém gió kể nhau mấy câu chuyện củ chuối hehe", img: "image/2.jpg" },
+            { text: "Ảnh này được cái chụp anh xấu điên mà em đẹp điên luônnnn, thiệt là bất công", img: "image/3.jpg" },
+            { text: "Chồng chúc vợ, có một ngày 20/11 thật là tuyệt vời nè, và nhiều nhiều ngày phải thật vui vẻ hạnh phúc nhé. Và cùng chồng cố gắng nhé!!! ", img: "image/4.jpg" },
+            { text: "QUÉT MÃ ĐỂ NHẬN QUÀ NÈ MOA MOAAAAA ", img: "image/5.jpg" },
+        ];
+
+        let currentIndex = 0;
+
+        // Hiển thị nội dung
+        function displayContent() {
+            const text = document.getElementById('text');
+            const image = document.getElementById('image');
+            
+            text.textContent = data[currentIndex].text;
+            image.src = data[currentIndex].img;
+
+            currentIndex = (currentIndex + 1) % data.length;
+        }
+
+        // Bắt đầu hiển thị nội dung
+        function startContent() {
+            const content = document.getElementById('content');
+            const title = document.getElementById('title');
+            const showButton = document.getElementById('showButton');
+
+            title.style.display = 'none';
+            showButton.style.display = 'none';
+
+            content.style.display = 'block';
+
+            displayContent();
+            setInterval(displayContent, 7000);
+        }
+    </script>
+</body>
+</html>
